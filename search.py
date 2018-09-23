@@ -121,14 +121,19 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    start_state = problem.getStartState()
+    """start_state = problem.getStartState()
     queue = util.Queue()
     root = Node(start_state, None, 0, None)
     queue.push(root)
+    visited = []
     while not queue.isEmpty():
 
         node = queue.pop()
-        print (node.state.pacman_position)
+        #print (node.state.pacman_position)
+        if node.state in visited:
+            continue
+        else:
+            visited.append(node.state)
         if problem.isGoalState(node.state):
             ans = []
             while node.parent is not None:
@@ -142,13 +147,40 @@ def breadthFirstSearch(problem):
         # lastNode = tempN
 
         # if we arrive
-        if node.state.pacman_position not in problem._visitedlist:
-            for triple in problem.getSuccessors(node.state):
-                # if child is visited, skip
-                newnode = Node(triple[0], triple[1], triple[2], node)
-                queue.push(newnode)
+        for triple in problem.getSuccessors(node.state):
+            # if child is visited, skip
+            newnode = Node(triple[0], triple[1], triple[2], node)
+            queue.push(newnode)
 
-    return []
+    return []"""
+    from game import Directions
+    start_state = problem.getStartState()
+    visited = []
+    queue = util.Queue()
+    queue.push(Node(start_state, None, 0, None))
+    finalNode = None
+    while not queue.isEmpty():
+        tempN = queue.pop()
+        if tempN.state in visited:
+            continue
+        else:
+            visited.append(tempN.state)
+        # if we arrive
+        if problem.isGoalState(tempN.state):
+            finalNode = tempN
+            break
+        for triple in problem.getSuccessors(tempN.state):
+            node = Node(triple[0], triple[1], triple[2], tempN)
+            queue.push(node)
+
+    ans = []
+    temp = finalNode
+    while temp:
+        if temp.action is not None:
+            ans.append(temp.action)
+        temp = temp.parent
+    ans.reverse()
+    return ans
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""

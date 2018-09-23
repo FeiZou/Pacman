@@ -265,10 +265,10 @@ def euclideanHeuristic(position, problem, info={}):
 #####################################################
 # This portion is incomplete.  Time to write code!  #
 #####################################################
-class CornerState:
-    def __init__(self, pacman_position, count):
-        self.pacman_position = pacman_position
-        self.count = count
+# class CornerState:
+#     def __init__(self, pacman_position, count):
+#         self.pacman_position = pacman_position
+#         self.count = count
 
 class CornersProblem(search.SearchProblem):
     """
@@ -292,8 +292,7 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
-        self.startstate = CornerState(self.startingPosition, list())
-        self._visited, self._visitedlist = {}, []
+        #self._visited, self._visitedlist = {}, []
 
     def getStartState(self):
         """
@@ -301,7 +300,10 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        return self.startstate
+        p = self.startingPosition
+        cornerState = [1, 1, 1, 1]
+        #return CornerState(p, cornerState)
+        return (p, cornerState)
 
     def isGoalState(self, state):
         """
@@ -309,7 +311,11 @@ class CornersProblem(search.SearchProblem):
         """
         "*** YOUR CODE HERE ***"
 
-        return len(state.count) == 2
+        if sum(state[1]) == 0:
+            return True
+        else:
+            return False
+
 
     def getSuccessors(self, state):
         """
@@ -323,13 +329,7 @@ class CornersProblem(search.SearchProblem):
         """
 
         successors = []
-        x,y = state.pacman_position
-        walked = state.count
-        if (x, y) in self.corners and (x, y) not in walked:
-            walked.append((x, y))
-            self._visited = {}
-            self._visitedlist = []
-        for action in [Directions.NORTH, Directions.EAST, Directions.SOUTH, Directions.WEST]:
+        for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall:
             #   x,y = currentPosition
@@ -337,20 +337,21 @@ class CornersProblem(search.SearchProblem):
             #   nextx, nexty = int(x + dx), int(y + dy)
             #   hitsWall = self.walls[nextx][nexty]
             #print (state.pacman_position)
-
+            x, y =  state[0]
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
             if not self.walls[nextx][nexty]:
-                nextWalked = walked[:]
-                nextState = CornerState((nextx, nexty), nextWalked)
+                nextPosition = (nextx, nexty)
+                nextCornerState = state[1][:]
+                for i, corner in enumerate(self.corners):
+                    if corner == nextPosition:
+                        nextCornerState[i] = 0
                 cost = 1
-                successors.append((nextState, action, cost))
+                #nextState = CornerState(nextPosition, nextCornerState)
+                nextState = (nextPosition, nextCornerState)
+                successors.append( ( nextState, action, cost) )
 
-        self._expanded += 1
-        if (x,y) not in self._visited:
-            self._visited[(x, y)] = True
-            self._visitedlist.append((x, y))
-        #print "expanded" + str(state.pacman_position)
+        self._expanded += 1 # DO NOT CHANGE
         return successors
 
     def getCostOfActions(self, actions):
