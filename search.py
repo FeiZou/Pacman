@@ -220,6 +220,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     start_state = problem.getStartState()
     root = Node(start_state, None, 0, None)
     pq = util.PriorityQueue()
+    visited = []
     pq.push(root, heuristic(start_state, problem))
     while not pq.isEmpty():
         node = pq.pop()
@@ -232,8 +233,9 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             ans.reverse()
             return ans
         successors = problem.getSuccessors(node.state)
+        visited.append(node.state)
         for triple in successors:
-            if triple[0] in problem._visitedlist:
+            if triple[0] in visited:
                 continue
             newnode = Node(triple[0], triple[1], triple[2]+node.cost, node)
             heur = heuristic(newnode.state, problem)
