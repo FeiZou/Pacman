@@ -121,7 +121,7 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    """start_state = problem.getStartState()
+    start_state = problem.getStartState()
     queue = util.Queue()
     root = Node(start_state, None, 0, None)
     queue.push(root)
@@ -152,8 +152,8 @@ def breadthFirstSearch(problem):
             newnode = Node(triple[0], triple[1], triple[2], node)
             queue.push(newnode)
 
-    return []"""
-    from game import Directions
+    return []
+    """from game import Directions
     start_state = problem.getStartState()
     visited = []
     queue = util.Queue()
@@ -180,7 +180,7 @@ def breadthFirstSearch(problem):
             ans.append(temp.action)
         temp = temp.parent
     ans.reverse()
-    return ans
+    return ans"""
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""

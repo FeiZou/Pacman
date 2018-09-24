@@ -300,7 +300,9 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
+        #initainize the startstate of corner problem
         p = self.startingPosition
+        #use a list to store the visited state of corners
         cornerState = [1, 1, 1, 1]
         #return CornerState(p, cornerState)
         return (p, cornerState)
@@ -310,7 +312,7 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-
+        # if sum() == 0 means that all corners are visited
         if sum(state[1]) == 0:
             return True
         else:
@@ -392,6 +394,7 @@ def cornersHeuristic(state, problem):
             continue
         else:
             x, y = state[0]
+            #using manhattan distance as heuristic
             distance = abs(x - corner[0]) + abs(y - corner[1])
             if distance > heuristic:
                 heuristic = distance
@@ -529,6 +532,7 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
+        # using bfs in search.py to find the path to the nearest dot
         return search.breadthFirstSearch(problem)
 
 
